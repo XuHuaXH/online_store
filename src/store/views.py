@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
-from store.models import Product
-from store.serializers import ProductSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from store.models import Product, CartItem
+from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def list_products(request):
     products = Product.objects.all()
     serializer = ProductSerializer(products, many=True)
@@ -14,12 +16,24 @@ def list_products(request):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])  # to remove
 def create_product(request):
     serializer = ProductSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# browse items in cart
+@api_view(['GET'])
+def view_cart(request):
+    try:
+        items = CartItem.objects.filter(owner=request.user)
+    except CartItem.DoesNotExist:
+        items = []
+    serializer = CartItemSerializer(items, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # add item to cart
