@@ -9,4 +9,8 @@ urlpatterns = [
     path('add-item/', views.add_item),
     path('cart-item-detail/<int:pk>/', views.cart_item_detail),
     path('cart-item/', views.cart_item),
+    path('create-order/', views.create_order),
+    path('create-address/', views.create_address),
+    path('address/', views.address),
+    path('list-addresses/', views.list_addresses),
 ]

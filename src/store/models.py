@@ -27,13 +27,14 @@ class Address(models.Model):
     city = models.CharField(max_length=30)
     state = models.CharField(max_length=10)
     zipcode = models.CharField(max_length=6)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Order(models.Model):
     time = models.DateTimeField(auto_now=True)
     total_price = models.FloatField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    shipping_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, default='')
 
 
 class OrderItem(models.Model):

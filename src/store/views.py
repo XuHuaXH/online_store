@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
-from store.models import Product, CartItem
-from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer
+from store.models import Product, CartItem, Order, OrderItem, Address
+from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer
 
 
 @api_view(['GET'])
@@ -83,3 +83,80 @@ def cart_item(request):
     elif request.method == 'DELETE':
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# turns all cart items into an order
+@api_view(['POST'])
+def create_order(request):
+    try:
+        address_id = request.data["address"]
+        address = Address.objects.get(id=address_id)
+    except Address.DoesNotExist:
+        return Response({"error": "Address not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if address.owner != request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    try:
+        # calculate the total price of all cart items
+        cart_items = CartItem.objects.filter(owner=request.user)
+        amount = 0.0
+        for item in cart_items:
+            price = item.product.price
+            amount += price * item.count
+
+        order = Order.create(owner=request.user, shipping_address=address, total_price=amount)
+
+        order = order.save()
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    # create individual order items
+    for item in cart_items:
+        order_item = OrderItem.create(item=item.product, count=item.count, order=order)
+        order_item.save()
+
+    # delete all cart items for the user
+    for item in cart_items:
+        item.delete()
+
+    return Response(status=status.HTTP_201_CREATED)
+
+
+# create a new address
+@api_view(['POST'])
+def create_address(request):
+    serializer = CreateAddressSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(owner=request.user)
+        return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# update or delete an address
+@api_view(['PUT', 'DELETE'])
+def address(request):
+
+    try:
+        address = Address.objects.get(id=request.data['id'])
+    except Address.DoesNotExist:
+        return Response({"info": "Address not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
+        serializer = AddressSerializer(address, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        address.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# list all address of the user
+@api_view(['GET'])
+def list_addresses(request):
+    addresses = Address.objects.filter(owner=request.user)
+    serializer = AddressSerializer(addresses, many=True)
+    return Response(serializer.data)
