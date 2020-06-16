@@ -13,4 +13,5 @@ urlpatterns = [
     path('create-address/', views.create_address),
     path('address/', views.address),
     path('list-addresses/', views.list_addresses),
+    path('list-orders/', views.list_orders),
 ]

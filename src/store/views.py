@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from store.models import Product, CartItem, Order, OrderItem, Address
-from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer
+from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer
 
 
 @api_view(['GET'])
@@ -97,23 +97,34 @@ def create_order(request):
     if address.owner != request.user:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    try:
-        # calculate the total price of all cart items
-        cart_items = CartItem.objects.filter(owner=request.user)
-        amount = 0.0
-        for item in cart_items:
-            price = item.product.price
-            amount += price * item.count
+    # try:
+    #     # calculate the total price of all cart items
+    #     cart_items = CartItem.objects.filter(owner=request.user)
+    #     amount = 0.0
+    #     for item in cart_items:
+    #         price = item.product.price
+    #         amount += price * item.count
+    #
+    #     order = Order.create(owner=request.user, shipping_address=address, total_price=amount)
+    #
+    #     order = order.save()
+    # except:
+    #     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        order = Order.create(owner=request.user, shipping_address=address, total_price=amount)
+    # calculate the total price of all cart items
+    cart_items = CartItem.objects.filter(owner=request.user)
+    amount = 0.0
+    for item in cart_items:
+        price = item.product.price
+        amount += price * item.count
 
-        order = order.save()
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+    order = Order(owner=request.user, shipping_address=address, total_price=amount)
+
+    order.save()
 
     # create individual order items
     for item in cart_items:
-        order_item = OrderItem.create(item=item.product, count=item.count, order=order)
+        order_item = OrderItem(item=item.product, count=item.count, order=order)
         order_item.save()
 
     # delete all cart items for the user
@@ -160,3 +171,11 @@ def list_addresses(request):
     addresses = Address.objects.filter(owner=request.user)
     serializer = AddressSerializer(addresses, many=True)
     return Response(serializer.data)
+
+
+# list all the orders placed by the user
+@api_view(['GET'])
+def list_orders(request):
+    orders = Order.objects.filter(owner=request.user)
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)

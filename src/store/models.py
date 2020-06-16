@@ -29,6 +29,9 @@ class Address(models.Model):
     zipcode = models.CharField(max_length=6)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '%s %s, %s, %s %s' % (self.street_number, self.street_name, self.city, self.state, self.zipcode)
+
 
 class Order(models.Model):
     time = models.DateTimeField(auto_now=True)
@@ -38,6 +41,6 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    item = models.ForeignKey(Product, on_delete=models.CASCADE)
+    item = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     count = models.SmallIntegerField()
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name='order_items', on_delete=models.CASCADE)
