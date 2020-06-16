@@ -46,13 +46,26 @@ def add_item(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def cart_item(request, pk):
-    """
-    Retrieve, update or delete a cart item.
-    """
+# get information of a cart items
+@api_view(['GET'])
+def cart_item_detail(request, pk):
     try:
         item = CartItem.objects.get(pk=pk)
+        # check if this item belongs to the current user
+        if item.owner != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+    except CartItem.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = CartItemSerializer(item)
+    return Response(serializer.data)
+
+
+# update or delete a cart item
+@api_view(['PUT', 'DELETE'])
+def cart_item(request):
+    try:
+        item = CartItem.objects.get(id=request.data["id"])
     except CartItem.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -60,14 +73,10 @@ def cart_item(request, pk):
     if item.owner != request.user:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    if request.method == 'GET':
-        serializer = CartItemSerializer(item)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = CartItemSerializer(data=request.data)
+    if request.method == 'PUT':
+        serializer = CartItemSerializer(item, data=request.data)
         if serializer.is_valid():
-            serializer.save(item)
+            serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
