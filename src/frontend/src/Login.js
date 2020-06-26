@@ -20,7 +20,7 @@ import {
 
 
 
-function Login() {
+function Login(props) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const initialRef = React.useRef();
 	const [username, setUsername] = useState('');
@@ -34,13 +34,15 @@ function Login() {
     	};
 		axios.post('http://127.0.0.1:8000/rest-auth/login/', data).then(function (response) {
 			localStorage.setItem('token', response.data.token);
-		})
+		}).then(onClose).then(props.reload);
 	}
 
-	
+
+
+
 	return (
 		<>
-	      <Button style={{float: 'right'}} onClick={onOpen}>Login</Button>
+	      <Button style={{float: 'right', display: props.authenticated ? 'none' : 'block'}} onClick={onOpen}>Login</Button>
 
 	      <Modal
 	        initialFocusRef={initialRef}

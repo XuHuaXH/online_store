@@ -44,10 +44,12 @@ class Header extends React.Component {
         };
     }
 
-    componentDidMount() {
+    componentDidMount = () => {
         if (localStorage.getItem('token') != null) {
             this.setState({authenticated: true});
         }
+        console.log(this.state.authenticated);
+        this.render();
     }
 
 
@@ -66,8 +68,14 @@ class Header extends React.Component {
                 </Button>
                 </Link>
                 <ColorModeButton />
-                <Login />
-                <Register />
+                <Login
+                    reload={this.componentDidMount}
+                    authenticated={this.state.authenticated}
+                />
+                <Register
+                    reload={this.componentDidMount}
+                    authenticated={this.state.authenticated}
+                />
                 <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.logout}>
                     Logout
                 </Button>
