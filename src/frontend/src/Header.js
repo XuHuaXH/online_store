@@ -6,6 +6,7 @@ import Register from './Register.js';
 import Products from './Products.js';
 import About from './About.js';
 import ColorModeButton from './ColorModeButton.js';
+import axios from 'axios';
 import { Box, Button, useColorMode } from "@chakra-ui/core";
 import {
   BrowserRouter as Router,
@@ -21,8 +22,12 @@ const color = "white";
 
 class Header extends React.Component {
 
-    logout() {
-        // TODO
+    logout = () => {
+        axios.post('http://127.0.0.1:8000/rest-auth/logout/').then(() => {
+            localStorage.removeItem('token');
+        }).then(() => {
+            this.setState({authenticated: false});
+        });
     }
 
     showCart() {
