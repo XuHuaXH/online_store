@@ -6,6 +6,7 @@ import Register from './Register.js';
 import Products from './Products.js';
 import About from './About.js';
 import ColorModeButton from './ColorModeButton.js';
+import ProductDetails from "./ProductDetails.js";
 import axios from 'axios';
 import { Box, Button, useColorMode } from "@chakra-ui/core";
 import {
@@ -100,7 +101,8 @@ class Header extends React.Component {
             <Route path="/products">
                 <Products />
             </Route>
-        	    </Switch>
+           <Route path="/product/:id" component={ProductDetails} />
+              </Switch>
         	</Router>
     	);
     }
