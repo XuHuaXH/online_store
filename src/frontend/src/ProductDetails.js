@@ -1,6 +1,8 @@
 import React from 'react';
 import {withRouter} from 'react-router';
 import { Box, Image, Badge, Icon } from "@chakra-ui/core";
+import OrderPanel from "./OrderPanel.js";
+import Reviews from "./Reviews.js";
 
 class ProductDetails extends React.Component {
 
@@ -15,9 +17,10 @@ class ProductDetails extends React.Component {
 
     render() {
 		return (
-			<h1>
-				This is product with id {this.state.id}.
-			</h1>
+			<>
+				<OrderPanel />
+				<Reviews />
+			</>
 	    );
 	}
 }

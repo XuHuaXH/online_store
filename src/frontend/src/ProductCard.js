@@ -27,7 +27,7 @@ class ProductCard extends React.Component {
 
     render() {
 		return (
-			<Link to={"/product/" + this.state.id}>
+		<Link to={"/product/" + this.state.id}>
 	      <Box maxW="sm" borderWidth="1px" rounded="lg" overflow="hidden">
 	        <Image src={this.state.imageUrl} alt={this.state.imageAlt} />
 

@@ -7,6 +7,7 @@ import Products from './Products.js';
 import About from './About.js';
 import ColorModeButton from './ColorModeButton.js';
 import ProductDetails from "./ProductDetails.js";
+import Settings from "./Settings.js";
 import axios from 'axios';
 import { Box, Button, useColorMode } from "@chakra-ui/core";
 import {
@@ -16,9 +17,7 @@ import {
   Link
 } from "react-router-dom";
 
-// const { colorMode, toggleColorMode } = useColorMode();
-const bgColor = { light: "red.500", dark: "red.200" };
-// const color = { light: "white", dark: "gray.800" };
+const bgColor = { light: "red.200", dark: "red.200" };
 const color = "white";
 
 class Header extends React.Component {
@@ -89,9 +88,11 @@ class Header extends React.Component {
                 <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showCart}>
                     Cart
                 </Button>
+                <Link to="/settings">
                 <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showSettings}>
                     Settings
                 </Button>
+                </Link>
     		</Box>
 
         	    <Switch>
@@ -100,6 +101,9 @@ class Header extends React.Component {
             </Route>
             <Route path="/products">
                 <Products />
+            </Route>
+            <Route path="/settings">
+                <Settings />
             </Route>
            <Route path="/product/:id" component={ProductDetails} />
               </Switch>
