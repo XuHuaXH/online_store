@@ -1,19 +1,40 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# get image file path here
+image_filepath = './images/'
+
+
+class Tag(models.Model):
+    name = models.CharField(max_length=30)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=30)
     price = models.FloatField()
-    description = models.TextField()
+    short_description = models.TextField()
+    long_description = models.TextField(default="long product description")
+    rating = models.DecimalField(max_digits=10, decimal_places=1, default=5)
+    tag = models.ManyToManyField(Tag)
 
     def __str__(self):
         return "%s %f\n%s" % (self.name, self.price, self.description)
 
 
-# class Cart(model.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-#
+class Image(models.Model):
+    image = models.ImageField(upload_to=image_filepath, height_field=600, width_field=800)
+    product = models.ForeignKey(Product, related_name='image', on_delete=models.CASCADE)
+
+
+class Review(models.Model):
+    name = models.CharField(max_length=50)
+    time = models.DateTimeField(auto_now=True)
+    rating = models.SmallIntegerField()
+    title = models.TextField()
+    review = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
 
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

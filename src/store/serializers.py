@@ -5,7 +5,14 @@ from store.models import Product, CartItem, Order, OrderItem, Address
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'description']
+        fields = ['id', 'name', 'price', 'short_description',
+                  'long_description', 'tag', 'rating', 'image']
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['name']
 
 
 class CreateCartItemSerializer(serializers.ModelSerializer):

@@ -25,6 +25,30 @@ def create_product(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# get detailed information of a product
+@api_view(['GET'])
+def product_detail(request, pk):
+    try:
+        product = Product.objects.get(pk=pk)
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    serializer = ProductSerializer(item)
+    return Response(serializer.data)
+
+
+# return all the tags of a product
+@api_view(['POST'])
+def list_tags(request):
+    try:
+        product = Product.objects.get(id=request.data["id"])
+    except Product.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    tags = Tags.objects.get(product=product)
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 # browse items in cart
 @api_view(['GET'])
 def view_cart(request):
