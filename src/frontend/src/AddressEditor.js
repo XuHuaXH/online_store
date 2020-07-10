@@ -68,7 +68,7 @@ function AddressEditor(props) {
 	      >
 	        <ModalOverlay />
 	        <ModalContent>
-	          <ModalHeader>Create a new address</ModalHeader>
+	          <ModalHeader>Change your address</ModalHeader>
 	          <ModalCloseButton />
 	          <ModalBody pb={6}>
 	            <FormControl isRequired>

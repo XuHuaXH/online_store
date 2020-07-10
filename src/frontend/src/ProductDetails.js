@@ -13,12 +13,15 @@ class ProductDetails extends React.Component {
 		}
 	}
 
+	componentDidMount = () => {
+
+	}
 
 
     render() {
 		return (
 			<>
-				<OrderPanel />
+				<OrderPanel id={this.state.id}/>
 				<Reviews />
 			</>
 	    );

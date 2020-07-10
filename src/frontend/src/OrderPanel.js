@@ -20,7 +20,7 @@ class OrderPanel extends React.Component {
 						<Gallery />
 					</Flex>
 					<Flex bg="purple.50" w="38.2%" p={16} alignItems="right">
-						<ProductInfo />
+						<ProductInfo id={this.props.id}/>
 					</Flex>
 				</Flex>
 			</Flex>

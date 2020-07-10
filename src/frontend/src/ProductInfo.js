@@ -1,11 +1,30 @@
 import React from 'react';
 import {withRouter} from 'react-router';
-import { Box, Image, Badge, Icon, Flex, Heading } from "@chakra-ui/core";
+import axios from 'axios';
+import { Box, Image, Badge, Icon, Flex, Heading, Button } from "@chakra-ui/core";
 
 class ProductInfo extends React.Component {
 
 	constructor(props) {
 		super(props);
+	}
+
+	handleAddToCart = () => {
+		const url = "http://localhost:8000/add-item/";
+		const token = localStorage.getItem('token');
+		const data = {
+			"product" : this.props.id,
+			"count" : 1
+		}
+		const header = {
+			headers: {
+      			Authorization: "JWT " + token
+   			}
+		};
+		axios.post(url, data, header)
+		.then((response) => {
+			console.log(response.data);
+		});
 	}
 
 
@@ -59,8 +78,12 @@ class ProductInfo extends React.Component {
 	            56 reviews
 	          </Box>
 	        </Box>
+			<Box p={3}>
+				<Button onClick={this.handleAddToCart} variantColor="teal" size="md">
+					Add to cart
+				</Button>
+			</Box>
 			<Flex
-	          mt="5"
 			  fontSize="s"
 	          lineHeight="tight"
 	        >

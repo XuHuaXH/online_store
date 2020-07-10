@@ -8,6 +8,7 @@ import About from './About.js';
 import ColorModeButton from './ColorModeButton.js';
 import ProductDetails from "./ProductDetails.js";
 import Settings from "./Settings.js";
+import Cart from "./Cart.js";
 import axios from 'axios';
 import { Box, Button, useColorMode } from "@chakra-ui/core";
 import {
@@ -84,10 +85,11 @@ class Header extends React.Component {
                 <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.logout}>
                     Logout
                 </Button>
-
+                <Link to="/cart">
                 <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showCart}>
                     Cart
                 </Button>
+                </Link>
                 <Link to="/settings">
                 <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showSettings}>
                     Settings
@@ -104,6 +106,9 @@ class Header extends React.Component {
             </Route>
             <Route path="/settings">
                 <Settings />
+            </Route>
+            <Route path="/cart">
+                <Cart />
             </Route>
            <Route path="/product/:id" component={ProductDetails} />
               </Switch>
