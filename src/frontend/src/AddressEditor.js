@@ -20,19 +20,22 @@ import {
 
 
 
-function AddressForm(props) {
+function AddressEditor(props) {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+    const address = props.address;
 
 	const initialRef = React.useRef();
 	const finalRef = React.useRef();
-    const [streetNumber, setStreetNumber] = useState('');
-    const [streetName, setStreetName] = useState('');
-	const [city, setCity] = useState('');
-	const [state, setState] = useState('');
-	const [zipcode, setZipcode] = useState('');
+    const [streetNumber, setStreetNumber] = useState(address.street_number);
+    const [streetName, setStreetName] = useState(address.street_name);
+	const [city, setCity] = useState(address.city);
+	const [state, setState] = useState(address.state);
+	const [zipcode, setZipcode] = useState(address.zipcode);
 
-    function onSubmit() {
+
+    function onSave() {
 		const data = {
+            "id": address.id,
 			"street_number" : streetNumber,
 			"street_name" : streetName,
             "city" : city,
@@ -47,15 +50,16 @@ function AddressForm(props) {
 		};
         console.log(data);
         console.log(header);
-		axios.post('http://127.0.0.1:8000/create-address/', data, header).then(function (response) {
+		axios.put('http://127.0.0.1:8000/address/', data, header).then(function (response) {
             console.log(response.data);
 		}).then(onClose).then(props.reload);
+
 	}
 
 
 	return (
 		<>
-	      <Button variantColor="teal" size="md" style={{float: 'left'}} onClick={onOpen}>Add address</Button>
+	      <Button variantColor="teal" size="md" style={{float: 'left'}} onClick={onOpen}>Edit</Button>
 
 	      <Modal
 	        initialFocusRef={initialRef}
@@ -70,7 +74,7 @@ function AddressForm(props) {
 	            <FormControl isRequired>
 	              <FormLabel>Street Number</FormLabel>
 	              <Input
-                    defaultValue="334455"
+                    defaultValue={address.street_number}
                     ref={initialRef}
                     onChange={(e)=>setStreetNumber(e.target.value)}
                     />
@@ -79,6 +83,7 @@ function AddressForm(props) {
 	            <FormControl mt={4} isRequired>
 	              <FormLabel>Street Name</FormLabel>
 	              <Input
+                    defaultValue={address.street_name}
                     onChange={(e)=>setStreetName(e.target.value)}
                     />
 	            </FormControl>
@@ -86,6 +91,7 @@ function AddressForm(props) {
 				<FormControl mt={4} isRequired>
 	              <FormLabel>City</FormLabel>
 	              <Input
+                    defaultValue={address.city}
                     onChange={(e)=>setCity(e.target.value)}
                     />
 	            </FormControl>
@@ -93,12 +99,14 @@ function AddressForm(props) {
 				<FormControl mt={4} isRequired>
 	              <FormLabel>State</FormLabel>
 	              <Input
+                    defaultValue={address.state}
                     onChange={(e)=>setState(e.target.value)}
                     />
 	            </FormControl>
 				<FormControl mt={4} isRequired>
 	              <FormLabel>Zipcode</FormLabel>
 	              <Input
+                    defaultValue={address.zipcode}
                     onChange={(e)=>setZipcode(e.target.value)}
                     />
 	            </FormControl>
@@ -106,11 +114,11 @@ function AddressForm(props) {
 
 	          <ModalFooter>
 	            <Button
-                    onClick={onSubmit}
+                    onClick={onSave}
                     variantColor="blue"
                     mr={3}
                 >
-	            	Submit
+	            	Save
 	            </Button>
 	            <Button onClick={onClose}>Cancel</Button>
 	          </ModalFooter>
@@ -121,4 +129,4 @@ function AddressForm(props) {
 }
 
 
-export default AddressForm;
+export default AddressEditor;

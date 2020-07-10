@@ -6,7 +6,6 @@ import axios from 'axios';
 
 
 
-
 class Settings extends React.Component {
 	constructor(props) {
 		super(props);
@@ -16,26 +15,40 @@ class Settings extends React.Component {
 		}
 	}
 
-	componentDidMount() {
-		// get user addresses
+	fetchAddresses = () => {
+		const token = localStorage.getItem('token');
+		const config = {
+   			headers: {
+      			Authorization: "JWT " + token
+   			}
+		};
+		axios.get('http://127.0.0.1:8000/list-addresses/', config).then((response) => {
+			this.setState({
+				addresses: response.data,
+			});
+			console.log("fetch address called");
+		});
+	}
+
+	fetchOrders = () => {
+
 		const token = localStorage.getItem('token');
 		const config = {
    			headers: {
       			Authorization: "JWT " + token
    			}
 		}
-		axios.get('http://127.0.0.1:8000/list-addresses/', config).then((response) => {
-			this.setState({
-				addresses: response.data,
-			});
-		});
 
-		// get user past orders
 		axios.get('http://127.0.0.1:8000/list-orders/', config).then( (response) => {
 			this.setState({
 				orders: response.data,
 			});
 		});
+	}
+
+	componentDidMount = () => {
+		this.fetchAddresses();
+		this.fetchOrders();
 	}
 
 	render() {
@@ -47,20 +60,20 @@ class Settings extends React.Component {
 					</Heading>
 					<Box alignItems="center" justify="center">
 						{this.state.addresses.map((address, index) =>
-							<AddressCard address={address} index={index}/>
+							<AddressCard
+								address={address}
+								reload={this.fetchAddresses}
+								index={index}/>
 						)}
 					</Box>
-					<Box>
-						<AddressForm reload={this.reload} />
+					<Box p={4}>
+						<AddressForm reload={this.fetchAddresses} />
 					</Box>
 				</Box>
 			</Flex>
 		);
 	}
 
-	reload() {
-		// TODO
-	}
 }
 
 
