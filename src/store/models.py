@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+import os
+from django.conf import settings
 
 # get image file path here
-image_filepath = './images/'
+images_path = os.path.join(settings.BASE_DIR, 'store/images/')
 
 
 class Tag(models.Model):
@@ -22,7 +24,7 @@ class Product(models.Model):
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to=image_filepath, height_field=600, width_field=800)
+    path = models.FilePathField(path=images_path)
     product = models.ForeignKey(Product, related_name='image', on_delete=models.CASCADE)
 
 

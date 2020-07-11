@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
-from store.models import Product, CartItem, Order, OrderItem, Address
-from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer
+from store.models import Product, CartItem, Order, OrderItem, Address, Review, Tag, Image
+from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer, ReviewSerializer, TagSerializer, ImageSerializer
 
 
 @api_view(['GET'])
@@ -27,6 +27,7 @@ def create_product(request):
 
 # get detailed information of a product
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def product_detail(request, pk):
     try:
         product = Product.objects.get(pk=pk)
@@ -35,18 +36,6 @@ def product_detail(request, pk):
 
     serializer = ProductSerializer(item)
     return Response(serializer.data)
-
-
-# return all the tags of a product
-@api_view(['POST'])
-def list_tags(request):
-    try:
-        product = Product.objects.get(id=request.data["id"])
-    except Product.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    tags = Tags.objects.get(product=product)
-    serializer = TagSerializer(tags, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 # browse items in cart
@@ -202,4 +191,135 @@ def list_addresses(request):
 def list_orders(request):
     orders = Order.objects.filter(owner=request.user)
     serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# list all the reviews of the product
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def list_reviews(request):
+    try:
+        product = Product.objects.get(id=request.data['id'])
+    except Product.DoesNotExist:
+        return Response({"info": "product not found"}, status=status.HTTP_404_NOT_FOUND)
+    reviews = Reviews.objects.filter(product=product)
+    serializer = ReviewSerializer(reviews, many=True)
+    return Response(serializer.data)
+
+
+# create a new review
+@api_view(['POST'])
+def add_review(request):
+    serializer = ReviewSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(author=request.user, name=request.user.username)
+        return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# update or delete a review
+@api_view(['PUT', 'DELETE'])
+def review(request):
+
+    try:
+        review = Review.objects.get(id=request.data['id'])
+    except Review.DoesNotExist:
+        return Response({"info": "Review not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if review.author != request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == 'PUT':
+        serializer = ReviewSerializer(review, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# list all the tags of a product
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def list_tags(request):
+    try:
+        product = Product.objects.get(id=request.data['id'])
+    except Product.DoesNotExist:
+        return Response({"info": "product not found"}, status=status.HTTP_404_NOT_FOUND)
+    tags = Tag.objects.filter(product=product)
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# list all tags
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def all_tags(request):
+    tags = Tag.objects.all()
+    serializer = TagSerializer(tags, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# create a new tag
+@api_view(['POST'])
+@permission_classes([AllowAny])  # to remove
+def create_tag(request):
+    serializer = TagSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# delete a tag
+@api_view(['DELETE'])
+@permission_classes([AllowAny])  # to remove
+def tag(request):
+
+    try:
+        tag = Tag.objects.get(id=request.data['id'])
+    except Tag.DoesNotExist:
+        return Response({"info": "Tag not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    tag.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# create a new image
+@api_view(['POST'])
+@permission_classes([AllowAny])  # to remove
+def create_image(request):
+    serializer = ImageSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+# delete an image
+@api_view(['DELETE'])
+@permission_classes([AllowAny])  # to remove
+def image(request):
+
+    try:
+        image = Image.objects.get(id=request.data['id'])
+    except Image.DoesNotExist:
+        return Response({"info": "image not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
+        image.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    else:
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+# list all images
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def all_images(request):
+    images = Image.objects.all()
+    serializer = ImageSerializer(images, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)

@@ -15,7 +15,13 @@ urlpatterns = [
     path('list-addresses/', views.list_addresses),
     path('list-orders/', views.list_orders),
     path('list-tags/', views.list_tags),
-    # path('list-reviews/', views.list_reviews),
-    # path('add-review/', views.add_review),
-    # path('review/', views.review),
+    path('all-tags/', views.all_tags),
+    path('create-tag/', views.create_tag),
+    path('tag/', views.tag),
+    path('create-image/', views.create_image),
+    path('image/', views.image),
+    path('all-images/', views.all_images),
+    path('list-reviews/', views.list_reviews),
+    path('add-review/', views.add_review),
+    path('review/', views.review)
 ]
