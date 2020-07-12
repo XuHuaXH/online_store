@@ -4,11 +4,8 @@ import os
 from django.conf import settings
 
 # get image file path here
-images_path = os.path.join(settings.BASE_DIR, 'store/images/')
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=30)
+# images_path = os.path.join(settings.BASE_DIR, 'store/images')
+images_path = "/Users/xuhua/desktop/online_store/src/store/images/"
 
 
 class Product(models.Model):
@@ -17,7 +14,6 @@ class Product(models.Model):
     short_description = models.TextField()
     long_description = models.TextField(default="long product description")
     rating = models.DecimalField(max_digits=10, decimal_places=1, default=5)
-    tag = models.ManyToManyField(Tag)
 
     def __str__(self):
         return "%s %f\n%s" % (self.name, self.price, self.description)
@@ -25,7 +21,10 @@ class Product(models.Model):
 
 class Image(models.Model):
     path = models.FilePathField(path=images_path)
-    product = models.ForeignKey(Product, related_name='image', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.path)
 
 
 class Review(models.Model):

@@ -3,8 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
-from store.models import Product, CartItem, Order, OrderItem, Address, Review, Tag, Image
-from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer, ReviewSerializer, TagSerializer, ImageSerializer
+from store.models import Product, CartItem, Order, OrderItem, Address, Review,  Image
+from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer, ReviewSerializer, ImageSerializer, CreateImageSerializer
 
 
 @api_view(['GET'])
@@ -22,7 +22,20 @@ def create_product(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# delete a product
+@api_view(['DELETE'])
+@permission_classes([AllowAny])  # to remove
+def delete_product(request):
+    try:
+        product = Product.objects.get(id=request.data["id"])
+    except Product.DoesNotExist:
+        return Response({"info": "product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    product.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # get detailed information of a product
@@ -46,7 +59,7 @@ def view_cart(request):
     except CartItem.DoesNotExist:
         items = []
     serializer = CartItemSerializer(items, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 # add item to cart
@@ -56,7 +69,7 @@ def add_item(request):
     if serializer.is_valid():
         serializer.save(owner=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # get information of a cart items
@@ -91,7 +104,7 @@ def cart_item(request):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         item.delete()
@@ -154,7 +167,7 @@ def create_address(request):
     if serializer.is_valid():
         serializer.save(owner=request.user)
         return Response(status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # update or delete an address
@@ -171,7 +184,7 @@ def address(request):
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         address.delete()
@@ -191,7 +204,7 @@ def list_addresses(request):
 def list_orders(request):
     orders = Order.objects.filter(owner=request.user)
     serializer = OrderSerializer(orders, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 # list all the reviews of the product
@@ -214,7 +227,7 @@ def add_review(request):
     if serializer.is_valid():
         serializer.save(author=request.user, name=request.user.username)
         return Response(status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # update or delete a review
@@ -234,75 +247,28 @@ def review(request):
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_200_OK)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
         review.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-# list all the tags of a product
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def list_tags(request):
-    try:
-        product = Product.objects.get(id=request.data['id'])
-    except Product.DoesNotExist:
-        return Response({"info": "product not found"}, status=status.HTTP_404_NOT_FOUND)
-    tags = Tag.objects.filter(product=product)
-    serializer = TagSerializer(tags, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# list all tags
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def all_tags(request):
-    tags = Tag.objects.all()
-    serializer = TagSerializer(tags, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# create a new tag
-@api_view(['POST'])
-@permission_classes([AllowAny])  # to remove
-def create_tag(request):
-    serializer = TagSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-# delete a tag
-@api_view(['DELETE'])
-@permission_classes([AllowAny])  # to remove
-def tag(request):
-
-    try:
-        tag = Tag.objects.get(id=request.data['id'])
-    except Tag.DoesNotExist:
-        return Response({"info": "Tag not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    tag.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
-
-
 # create a new image
 @api_view(['POST'])
 @permission_classes([AllowAny])  # to remove
 def create_image(request):
-    serializer = ImageSerializer(data=request.data)
+    serializer = CreateImageSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+    return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # delete an image
 @api_view(['DELETE'])
 @permission_classes([AllowAny])  # to remove
-def image(request):
+def delete_image(request):
 
     try:
         image = Image.objects.get(id=request.data['id'])

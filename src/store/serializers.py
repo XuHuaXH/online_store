@@ -1,24 +1,25 @@
 from rest_framework import serializers
-from store.models import Product, CartItem, Order, OrderItem, Address, Review, Tag, Image
+from store.models import Product, CartItem, Order, OrderItem, Address, Review, Image
 
 
 class ProductSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Product
         fields = ['id', 'name', 'price', 'short_description',
-                  'long_description', 'tag', 'rating', 'image']
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ['id', 'name']
+                  'long_description', 'rating']
 
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'path']
+
+
+class CreateImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = ['product', 'path']
 
 
 class ReviewSerializer(serializers.ModelSerializer):
