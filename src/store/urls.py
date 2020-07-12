@@ -18,6 +18,7 @@ urlpatterns = [
     path('create-image/', views.create_image),
     path('delete-image/', views.delete_image),
     path('all-images/', views.all_images),
+    path('list-images/', views.list_images),
     path('list-reviews/', views.list_reviews),
     path('add-review/', views.add_review),
     path('review/', views.review)

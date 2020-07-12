@@ -289,3 +289,16 @@ def all_images(request):
     images = Image.objects.all()
     serializer = ImageSerializer(images, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# list all the images of the product
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def list_images(request):
+    try:
+        product = Product.objects.get(id=request.data['id'])
+    except Product.DoesNotExist:
+        return Response({"info": "product not found"}, status=status.HTTP_404_NOT_FOUND)
+    images = Image.objects.filter(product=product)
+    serializer = ImageSerializer(images, many=True)
+    return Response(serializer.data)
