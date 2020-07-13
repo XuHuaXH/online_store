@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { Box, Image, Badge, Icon } from "@chakra-ui/core";
 import {
   BrowserRouter as Router,
@@ -8,6 +9,7 @@ import {
 } from "react-router-dom";
 import ProductDetails from "./ProductDetails.js";
 
+// imageUrl: "https://bit.ly/2Z4KKcF"
 class ProductCard extends React.Component {
 
 	constructor(props) {
@@ -15,21 +17,55 @@ class ProductCard extends React.Component {
 		const product = this.props.product;
 		this.state = {
 			id: product.id,
-			imageUrl: "https://bit.ly/2Z4KKcF",
-			imageAlt: "Rear view of modern home with pool",
+			image: '',
 			name: product.name,
 			formattedPrice: "$" + product.price,
-			description: product.description,
-			reviewCount: 34,
-			rating: 4,
+			description: product.short_description,
+			reviewCount: 0,
+			rating: product.rating,
 		}
 	}
+
+    componentDidMount = () => {
+        this.fetchImages();
+        this.fetchReviewCount();
+    }
+
+    fetchImages = () => {
+		const data = {
+			"id": this.props.product.id
+		}
+		axios.post("http://127.0.0.1:8000/list-images/", data).then((response) => {
+			this.setState({
+				image: response.data[0]
+			});
+            console.log(response.data);
+		});
+	}
+
+    fetchReviewCount = () => {
+		const token = localStorage.getItem('token');
+		const header = {
+			headers: {
+				Authorization: "JWT " + token
+			}
+		};
+		const data = {
+			"id": this.props.product.id
+		}
+		axios.post('http://127.0.0.1:8000/list-reviews/', data, header).then( (response) => {
+			this.setState({
+				reviewCount: response.data.length,
+			});
+		});
+	}
+
 
     render() {
 		return (
 		<Link to={"/product/" + this.state.id}>
 	      <Box maxW="sm" borderWidth="1px" rounded="lg" overflow="hidden">
-	        <Image src={this.state.imageUrl} alt={this.state.imageAlt} />
+	        <Image height={250} width={350} src={this.state.image.path} alt={this.state.imageAlt} />
 
 	        <Box p="6">
 	          <Box d="flex" alignItems="baseline">
@@ -51,7 +87,7 @@ class ProductCard extends React.Component {
 	          <Box>
 	            {this.state.formattedPrice}
 	          </Box>
-			  <Box>
+			  <Box color="gray.600">
 	            {this.state.description}
 	          </Box>
 
