@@ -1,6 +1,13 @@
 import React from 'react';
 import axios from 'axios';
 import { Box, Image, Badge, Icon, Heading, Text, Button, Flex } from "@chakra-ui/core";
+import {
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from "@chakra-ui/core";
 import AddressEditor from "./AddressEditor.js";
 
 class CartItemCard extends React.Component {
@@ -8,11 +15,14 @@ class CartItemCard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			item: this.props.item
+			product: this.props.item.product,
+			count: this.props.item.count,
+			id: this.props.item.id
 		}
 	}
 
 	componentDidMount = () => {
+		console.log(this.props.item);
 	}
 
 	handleDelete = () => {
@@ -23,26 +33,59 @@ class CartItemCard extends React.Component {
     			Authorization: "JWT " + token
   			},
   			data: {
-				"id": this.props.item.id
+				"id": this.state.id
 			}
 		}
 		axios.delete(url, config).then(this.props.reload);
 	}
 
+	changeOrderSize = (size) => {
+		const url = "http://localhost:8000/cart-item/";
+		const token = localStorage.getItem('token');
+		const data = {
+			"id": this.state.id,
+			"product": this.state.product.id,
+			"count": size
+		};
+		 const header = {
+			 headers: {
+       			Authorization: "JWT " + token
+    		}
+		};
+		axios.put(url, data, header).then((response) => {
+			console.log(response.data);
+		});
+
+	}
+
+
 
     render() {
-		const item = this.state.item;
 		const bgColor = this.props.index % 2 === 0 ? "gray.200" : "white";
 		return (
 			<Flex p={5} w="100%" bg={bgColor}>
-				<Heading fontSize="xl">{item.product.name}</Heading>
+				<Box
+				w="30%"
+				color="black"
+				fontWeight="semibold"
+				letterSpacing="wide"
+				fontSize="xl"
+				ml="2"
+				>
+					{this.state.product.name}
+				</Box>
 				<Flex w="100%" justify="center" alignItems="center">
 					<Box p={5} w="90%">
-						{item.product.price}
+						${this.state.product.price}
 					</Box>
-					<Box p={5} w="90%">
-						Count: {item.count}
-					</Box>
+					<NumberInput w="30%" defaultValue={this.state.count} min={1} max={20} onChange={this.changeOrderSize}>
+						<NumberInputField
+							borderColor="gray.500" />
+						<NumberInputStepper>
+						<NumberIncrementStepper borderColor="gray.500" color="gray.500"/>
+						<NumberDecrementStepper borderColor="gray.500" color="gray.500"/>
+						</NumberInputStepper>
+					</NumberInput>
 					<Flex w="20%">
 						<Box p={2}>
 							<Button onClick={this.handleDelete} variantColor="teal" size="md">

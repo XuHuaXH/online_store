@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from store.models import Product, CartItem, Order, OrderItem, Address, Review,  Image
-from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer, ReviewSerializer, ImageSerializer, CreateImageSerializer
+from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer, ReviewSerializer, ImageSerializer, CreateImageSerializer, UpdateCartItemSerializer
 
 
 @api_view(['GET'])
@@ -100,7 +100,7 @@ def cart_item(request):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'PUT':
-        serializer = CartItemSerializer(item, data=request.data)
+        serializer = UpdateCartItemSerializer(item, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

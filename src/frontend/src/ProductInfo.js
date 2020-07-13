@@ -2,6 +2,13 @@ import React from 'react';
 import {withRouter} from 'react-router';
 import axios from 'axios';
 import { Box, Image, Badge, Icon, Flex, Heading, Button, Divider } from "@chakra-ui/core";
+import {
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from "@chakra-ui/core";
 
 class ProductInfo extends React.Component {
 
@@ -10,7 +17,8 @@ class ProductInfo extends React.Component {
 		this.state = {
 			product: {
 
-			}
+			},
+			orderSize: 0
 		}
 	}
 
@@ -35,7 +43,7 @@ class ProductInfo extends React.Component {
 		const token = localStorage.getItem('token');
 		const data = {
 			"product" : this.props.id,
-			"count" : 1
+			"count" : this.state.orderSize
 		}
 		const header = {
 			headers: {
@@ -46,6 +54,13 @@ class ProductInfo extends React.Component {
 		.then((response) => {
 			console.log(response.data);
 		});
+	}
+
+	changeOrderSize = (size) => {
+		this.setState({
+			orderSize: size
+		});
+		console.log(this.state.orderSize);
 	}
 
 
@@ -89,12 +104,22 @@ class ProductInfo extends React.Component {
 	          </Box>
 	        </Box>
 
+
 			<Divider />
-			<Box mt="4">
+			<Flex mt="4">
+				<NumberInput w="30%" defaultValue={1} min={1} max={20} onChange={this.changeOrderSize}>
+					<NumberInputField
+						borderColor="gray.500" />
+					<NumberInputStepper>
+					<NumberIncrementStepper borderColor="gray.500" color="gray.500"/>
+					<NumberDecrementStepper borderColor="gray.500" color="gray.500"/>
+					</NumberInputStepper>
+				</NumberInput>
+				<Box w="10%"/>
 				<Button onClick={this.handleAddToCart} variantColor="teal" size="md">
 					Add to cart
 				</Button>
-			</Box>
+			</Flex>
 
 			<Flex mt="3"
 			  fontSize="s"
