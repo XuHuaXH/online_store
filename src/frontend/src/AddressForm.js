@@ -70,7 +70,6 @@ function AddressForm(props) {
 	            <FormControl isRequired>
 	              <FormLabel>Street Number</FormLabel>
 	              <Input
-                    defaultValue="334455"
                     ref={initialRef}
                     onChange={(e)=>setStreetNumber(e.target.value)}
                     />

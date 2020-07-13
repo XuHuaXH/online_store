@@ -36,6 +36,7 @@ class CreateCartItemSerializer(serializers.ModelSerializer):
 
 
 class CartItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
 
     class Meta:
         model = CartItem

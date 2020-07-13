@@ -13,10 +13,7 @@ class Cart extends React.Component {
 		}
 	}
 
-
-
 	fetchCartItems = () => {
-
 		const token = localStorage.getItem('token');
 		const config = {
    			headers: {
@@ -37,6 +34,26 @@ class Cart extends React.Component {
 		this.fetchCartItems();
 	}
 
+	handleCheckout = () => {
+		const token = localStorage.getItem('token');
+		const config = {
+   			headers: {
+      			Authorization: "JWT " + token
+   			},
+			data: {
+				"address": 3
+			}
+		};
+
+		axios.post('http://127.0.0.1:8000/create-order/', config)
+		.then((response) => {
+			console.log(response.data);
+			this.setState({
+				items: []
+			});
+		});
+	}
+
 	render() {
 		return (
 			<Flex bg="blue.50" w="100%" p={16} alignItems="center">
@@ -51,6 +68,11 @@ class Cart extends React.Component {
 								reload={this.fetchCartItems}
 								index={index}/>
 						)}
+					</Box>
+					<Box p={4}>
+						<Button onClick={this.handleCheckout} variantColor="teal" size="md">
+							Checkout
+						</Button>
 					</Box>
 				</Box>
 			</Flex>

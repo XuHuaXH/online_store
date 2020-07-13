@@ -3,10 +3,6 @@ from django.contrib.auth.models import User
 import os
 from django.conf import settings
 
-# get image file path here
-# images_path = os.path.join(settings.BASE_DIR, 'store/images')
-images_path = "/Users/xuhua/desktop/online_store/src/store/images/"
-
 
 class Product(models.Model):
     name = models.CharField(max_length=30)
@@ -20,7 +16,7 @@ class Product(models.Model):
 
 
 class Image(models.Model):
-    path = models.FilePathField(path=images_path)
+    path = models.CharField(max_length=50)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):

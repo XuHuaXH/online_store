@@ -1,12 +1,33 @@
 import React from 'react';
 import {withRouter} from 'react-router';
 import axios from 'axios';
-import { Box, Image, Badge, Icon, Flex, Heading, Button } from "@chakra-ui/core";
+import { Box, Image, Badge, Icon, Flex, Heading, Button, Divider } from "@chakra-ui/core";
 
 class ProductInfo extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			product: {
+
+			}
+		}
+	}
+
+	componentDidMount = () => {
+		this.fetchProduct();
+	}
+
+	fetchProduct = () => {
+		const data = {
+			"id": this.props.id
+		}
+		axios.post("http://localhost:8000/product/", data).then((response) => {
+			this.setState({
+				product: response.data
+			});
+			console.log(response.data);
+		});
 	}
 
 	handleAddToCart = () => {
@@ -31,20 +52,11 @@ class ProductInfo extends React.Component {
 
     render() {
 		return (
-		<Box mt="2" alignItems="center">
+		<Box mt="3" alignItems="center">
 			<Heading as="h1" size="xl">
-				Product Name
+				{this.state.product.name}
 			</Heading>
-			<Box
-	          mt="1"
-	          fontWeight="semibold"
-	          as="h4"
-	          lineHeight="tight"
-	          isTruncated
-	        >
-	        	short description
-	        </Box>
-	        <Box d="flex" alignItems="baseline">
+	        <Box mt="3" d="flex" alignItems="baseline">
 				<Badge rounded="full" px="2" variantColor="teal">
 					New
 				</Badge>
@@ -56,15 +68,13 @@ class ProductInfo extends React.Component {
 				textTransform="uppercase"
 				ml="2"
 				>
-					23 beds &bull; 56 baths
+					{this.state.product.short_description}
 				</Box>
 	        </Box>
-
-	        <Box d="flex" mt="2" alignItems="center">
-	        	$35.65
+	        <Box d="flex" mt="3" fontWeight="semibold" alignItems="center">
+	        	${this.state.product.price}
 	        </Box>
-
-	        <Box d="flex" mt="2" alignItems="center">
+			<Box d="flex" mt="3" alignItems="center">
 	          {Array(5)
 	            .fill("")
 	            .map((_, i) => (
@@ -78,16 +88,19 @@ class ProductInfo extends React.Component {
 	            56 reviews
 	          </Box>
 	        </Box>
-			<Box p={3}>
+
+			<Divider />
+			<Box mt="4">
 				<Button onClick={this.handleAddToCart} variantColor="teal" size="md">
 					Add to cart
 				</Button>
 			</Box>
-			<Flex
+
+			<Flex mt="3"
 			  fontSize="s"
 	          lineHeight="tight"
 	        >
-	        	long description long description long description long description long description long description long description long description long description long description long description long description long description long description long description long description long description long description long description
+	        	{this.state.product.long_description}
 	        </Flex>
 		</Box>
 	    );

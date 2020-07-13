@@ -2,6 +2,7 @@ import React from 'react';
 import { SimpleGrid, Box, Flex, Heading, Button } from "@chakra-ui/core";
 import AddressCard from "./AddressCard.js";
 import AddressForm from "./AddressForm.js";
+import OrderCard from "./OrderCard.js";
 import axios from 'axios';
 
 
@@ -26,7 +27,6 @@ class Settings extends React.Component {
 			this.setState({
 				addresses: response.data,
 			});
-			console.log("fetch address called");
 		});
 	}
 
@@ -53,7 +53,7 @@ class Settings extends React.Component {
 
 	render() {
 		return (
-			<Flex bg="blue.50" w="100%" p={16} alignItems="center">
+			<Box bg="blue.50" w="100%" p={16} alignItems="center">
 				<Box bg="red.50" w="100%" p={16} alignItems="center">
 					<Heading p={5}>
 						Address
@@ -70,7 +70,21 @@ class Settings extends React.Component {
 						<AddressForm reload={this.fetchAddresses} />
 					</Box>
 				</Box>
-			</Flex>
+
+				<Box bg="red.50" w="100%" p={16} alignItems="center">
+					<Heading p={5}>
+						Orders
+					</Heading>
+					<Box alignItems="center" justify="center">
+						{this.state.orders.map((order, index) =>
+							<OrderCard
+								order={order}
+								reload={this.fetchOrder}
+								index={index}/>
+						)}
+					</Box>
+				</Box>
+			</Box>
 		);
 	}
 

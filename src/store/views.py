@@ -39,15 +39,15 @@ def delete_product(request):
 
 
 # get detailed information of a product
-@api_view(['GET'])
+@api_view(['POST'])
 @permission_classes([AllowAny])
-def product_detail(request, pk):
+def product_detail(request):
     try:
-        product = Product.objects.get(pk=pk)
+        product = Product.objects.get(id=request.data["id"])
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = ProductSerializer(item)
+    serializer = ProductSerializer(product)
     return Response(serializer.data)
 
 
