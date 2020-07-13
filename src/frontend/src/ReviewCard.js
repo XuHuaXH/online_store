@@ -14,8 +14,9 @@ class ReviewCard extends React.Component {
 		super(props);
 		const review = this.props.review;
 		this.state = {
+            id: review.id,
 			author: review.author,
-			date: review.date,
+			time: review.time,
 			title: review.title,
 			review: review.review,
 			rating: review.rating
@@ -30,7 +31,7 @@ class ReviewCard extends React.Component {
 					  {this.state.author}
 					</Box>
 					<Box as="span" color="gray.600" fontSize="sm">
-	  				  {this.state.date}
+	  				  {this.state.time}
 	  			  	</Box>
 					<Box d="flex" mt="2" alignItems="center">
 	  	            {Array(5)

@@ -43,6 +43,8 @@ class Settings extends React.Component {
 			this.setState({
 				orders: response.data,
 			});
+		}).then(() => {
+			console.log(this.state.orders);
 		});
 	}
 

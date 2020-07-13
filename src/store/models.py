@@ -25,7 +25,7 @@ class Image(models.Model):
 
 class Review(models.Model):
     name = models.CharField(max_length=50)
-    time = models.DateTimeField(auto_now=True)
+    time = models.CharField(max_length=50)
     rating = models.SmallIntegerField()
     title = models.TextField()
     review = models.TextField()

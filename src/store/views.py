@@ -215,7 +215,7 @@ def list_reviews(request):
         product = Product.objects.get(id=request.data['id'])
     except Product.DoesNotExist:
         return Response({"info": "product not found"}, status=status.HTTP_404_NOT_FOUND)
-    reviews = Reviews.objects.filter(product=product)
+    reviews = Review.objects.filter(product=product)
     serializer = ReviewSerializer(reviews, many=True)
     return Response(serializer.data)
 

@@ -23,9 +23,12 @@ class CreateImageSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
+    author = serializers.StringRelatedField()
+    time = serializers.StringRelatedField()
+
     class Meta:
         model = Review
-        fields = ['id', 'product', 'time', 'rating', 'title', 'review']
+        fields = ['id', 'author', 'product', 'time', 'rating', 'title', 'review']
 
 
 class CreateCartItemSerializer(serializers.ModelSerializer):

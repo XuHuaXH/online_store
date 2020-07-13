@@ -22,7 +22,7 @@ class ProductDetails extends React.Component {
 		return (
 			<>
 				<OrderPanel id={this.state.id}/>
-				<Reviews />
+				<Reviews id={this.state.id}/>
 			</>
 	    );
 	}

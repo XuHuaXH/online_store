@@ -48,8 +48,6 @@ function AddressEditor(props) {
       			Authorization: "JWT " + token
    			}
 		};
-        console.log(data);
-        console.log(header);
 		axios.put('http://127.0.0.1:8000/address/', data, header).then(function (response) {
             console.log(response.data);
 		}).then(onClose).then(props.reload);
