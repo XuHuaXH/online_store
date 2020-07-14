@@ -45,11 +45,12 @@ class ReviewEditor extends React.Component {
 		const time = d.getMonth() + "/" + d.getDate() + "/" + d.getFullYear();
 		const data = {
 			"product": this.props.id,
-			"time": time,
+			"time": d.getMonth() + "/" + d.getDate() + "/" + d.getFullYear(),
 			"title": this.state.title,
 			"review": this.state.review,
 			"rating": this.state.rating
 		};
+        console.log(data);
 		const token = localStorage.getItem('token');
 		const header = {
 			headers: {
@@ -81,6 +82,7 @@ class ReviewEditor extends React.Component {
 							<Box p={3}>
 								<FormLabel htmlFor="title">Title</FormLabel>
 								<Input
+                                    value={this.state.title}
 									onChange={this.setTitle}
 									borderColor="gray.500"
 									placeholder="Give your review a short title."/>
@@ -88,6 +90,7 @@ class ReviewEditor extends React.Component {
 							<Box p={3}>
 								<FormLabel htmlFor="review">Review</FormLabel>
 								<Textarea
+                                    value={this.state.review}
 									onChange={this.setReview}
 									borderColor="gray.500"
 									placeholder="What do you think of this product?"/>
@@ -100,12 +103,12 @@ class ReviewEditor extends React.Component {
 				  	                <Button
 										width="10px"
 										size="lg"
-										onClick={() => this.setRating(i)}>
+										onClick={() => this.setRating(i + 1)}>
 										<Icon
 										  size="26px"
 										  name="star"
 										  key={i}
-										  color={i <= this.state.rating ? "teal.500" : "gray.300"}
+										  color={i < this.state.rating ? "teal.500" : "gray.300"}
 										/>
 									</Button>
 				  	              ))}

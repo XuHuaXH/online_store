@@ -22,13 +22,14 @@ class ProductCard extends React.Component {
 			formattedPrice: "$" + product.price,
 			description: product.short_description,
 			reviewCount: 0,
-			rating: product.rating,
+            reviews: [],
+			rating: 0
 		}
 	}
 
     componentDidMount = () => {
+        this.fetchReviews();
         this.fetchImages();
-        this.fetchReviewCount();
     }
 
     fetchImages = () => {
@@ -43,7 +44,7 @@ class ProductCard extends React.Component {
 		});
 	}
 
-    fetchReviewCount = () => {
+    fetchReviews = () => {
 		const token = localStorage.getItem('token');
 		const header = {
 			headers: {
@@ -55,17 +56,32 @@ class ProductCard extends React.Component {
 		}
 		axios.post('http://127.0.0.1:8000/list-reviews/', data, header).then( (response) => {
 			this.setState({
+                reviews: response.data,
 				reviewCount: response.data.length,
 			});
-		});
+		}).then(() => this.computeRating());
 	}
+
+    computeRating = () => {
+        let sum = 0.0;
+        const reviews = this.state.reviews;
+        for (let i = 0; i < reviews.length; ++i) {
+            sum += reviews[i].rating;
+        }
+        const rating = reviews.length == 0 ? 0 : sum / reviews.length;
+        this.setState({
+            rating: rating
+        });
+        console.log("the rating is " + this.state.rating);
+    }
+
 
 
     render() {
 		return (
 		<Link to={"/product/" + this.state.id}>
 	      <Box maxW="sm" borderWidth="1px" rounded="lg" overflow="hidden">
-	        <Image height={250} width={350} src={this.state.image.path} alt={this.state.imageAlt} />
+	        <Image height={230} width={350} src={this.state.image.path} alt={this.state.imageAlt} />
 
 	        <Box p="6">
 	          <Box d="flex" alignItems="baseline">

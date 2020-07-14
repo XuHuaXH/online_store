@@ -18,8 +18,6 @@ import {
   Link
 } from "react-router-dom";
 
-const bgColor = { light: "red.200", dark: "red.200" };
-const color = "white";
 
 class Header extends React.Component {
 
@@ -31,22 +29,11 @@ class Header extends React.Component {
         });
     }
 
-    showCart() {
-        // TODO
-    }
-
-    showSettings() {
-        // TODO
-    }
-
 
     constructor(props) {
         super(props);
         this.state = {
-            authenticated: false,
-            colorMode: "dark",
-            bgColor: "red.200",
-            color: "gray.800"
+            authenticated: false
         };
     }
 
@@ -62,7 +49,7 @@ class Header extends React.Component {
     render() {
         return (
             <Router>
-    		<Box bg="tomato" w="100%" p={20} bg={this.state.bgColor} color={this.state.color}>
+    		<Box bg="teal.100" w="100%" p={20}>
                 <Link to="/about">
                 <Button style={{float: 'left'}}>
                     About

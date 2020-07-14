@@ -9,7 +9,7 @@ class Product(models.Model):
     price = models.FloatField()
     short_description = models.TextField()
     long_description = models.TextField(default="long product description")
-    rating = models.DecimalField(max_digits=10, decimal_places=1, default=5)
+    # rating = models.DecimalField(max_digits=10, decimal_places=1, default=5)
 
     def __str__(self):
         return "%s %f\n%s" % (self.name, self.price, self.description)

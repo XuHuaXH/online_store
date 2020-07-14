@@ -65,17 +65,17 @@ class CartItemCard extends React.Component {
 		return (
 			<Flex p={5} w="100%" bg={bgColor}>
 				<Box
-				w="30%"
+                p={4}
+				w="40%"
 				color="black"
 				fontWeight="semibold"
 				letterSpacing="wide"
 				fontSize="xl"
-				ml="2"
 				>
 					{this.state.product.name}
 				</Box>
 				<Flex w="100%" justify="center" alignItems="center">
-					<Box p={5} w="90%">
+					<Box p={5} w="90%" fontWeight="semibold" color="gray.700">
 						${this.state.product.price}
 					</Box>
 					<NumberInput w="30%" defaultValue={this.state.count} min={1} max={20} onChange={this.changeOrderSize}>

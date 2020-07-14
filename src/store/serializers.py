@@ -7,7 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'price', 'short_description',
-                  'long_description', 'rating']
+                  'long_description']
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -24,7 +24,6 @@ class CreateImageSerializer(serializers.ModelSerializer):
 
 class ReviewSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
-    time = serializers.StringRelatedField()
 
     class Meta:
         model = Review

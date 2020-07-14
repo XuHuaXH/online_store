@@ -18,12 +18,46 @@ class ProductInfo extends React.Component {
 			product: {
 
 			},
-			orderSize: 0
+			orderSize: 0,
+            reviews: [],
+            reviewCount: 0,
+            rating: 0
 		}
 	}
 
 	componentDidMount = () => {
 		this.fetchProduct();
+        this.fetchReviews();
+	}
+
+    computeRating = () => {
+        let sum = 0.0;
+        const reviews = this.state.reviews;
+        for (let i = 0; i < reviews.length; ++i) {
+            sum += reviews[i].rating;
+        }
+        const rating = reviews.length == 0 ? 0 : sum / reviews.length;
+        this.setState({
+            rating: rating
+        });
+    }
+
+    fetchReviews = () => {
+		const token = localStorage.getItem('token');
+		const header = {
+			headers: {
+				Authorization: "JWT " + token
+			}
+		};
+		const data = {
+			"id": this.props.id
+		}
+		axios.post('http://127.0.0.1:8000/list-reviews/', data, header).then( (response) => {
+			this.setState({
+                reviews: response.data,
+				reviewCount: response.data.length,
+			});
+		}).then(() => this.computeRating());
 	}
 
 	fetchProduct = () => {
@@ -96,11 +130,11 @@ class ProductInfo extends React.Component {
 	              <Icon
 				  	name="star"
 	                key={i}
-	                color={i < 5 ? "teal.500" : "gray.300"}
+	                color={i < this.state.rating ? "teal.500" : "gray.300"}
 	              />
 	            ))}
 	          <Box as="span" ml="2" color="gray.600" fontSize="sm">
-	            56 reviews
+	            {this.state.reviewCount} reviews
 	          </Box>
 	        </Box>
 

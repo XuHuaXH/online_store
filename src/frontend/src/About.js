@@ -6,8 +6,8 @@ import { SimpleGrid, Box, Flex } from "@chakra-ui/core";
 
 function About() {
 	return (
-		<Flex bg="blue.50" align="center" justify="center">
-			This is about page
+		<Flex bg="blue.50" height="900px" align="center" justify="center">
+			This is the about page
 		</Flex>
 	);
 }

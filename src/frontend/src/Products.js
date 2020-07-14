@@ -2,6 +2,12 @@ import React from 'react';
 import { SimpleGrid, Box, Flex } from "@chakra-ui/core";
 import axios from 'axios';
 import ProductCard from './ProductCard.js';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 
 
 
@@ -39,6 +45,7 @@ class Products extends React.Component {
 		);
 	}
 }
+
 
 
 

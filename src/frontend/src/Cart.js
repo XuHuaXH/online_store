@@ -98,9 +98,13 @@ class Cart extends React.Component {
 								index={index}/>
 						)}
 					</Box>
-					<Box p={4}>
+					<Box p={5} style={{ display: this.state.items.length == 0 ? "block" : "none" }}>
+						Nothing in cart yet :)
+					</Box>
+					<Flex p={4} style={{ display: this.state.items.length == 0 ? "none" : 'inline-block' }} w="100%" justify="center" alignItems="center">
 						<Select
-							placeholder="Select option"
+							w="40%"
+							placeholder="Select a shipping address"
 							color="black"
 							borderColor="black"
 							onChange={this.handleSelect}>
@@ -108,10 +112,10 @@ class Cart extends React.Component {
 								<option value={address.id}>{address.street_number} {address.street_name}, {address.city}, {address.state} {address.zipcode}</option>
 							))}
 						</Select>
-						<Button onClick={this.handleCheckout} variantColor="teal" size="md">
+						<Button mt="2" onClick={this.handleCheckout} variantColor="teal" size="md">
 							Checkout
 						</Button>
-					</Box>
+					</Flex>
 				</Box>
 			</Flex>
 		);
