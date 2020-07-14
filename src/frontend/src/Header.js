@@ -10,12 +10,13 @@ import ProductDetails from "./ProductDetails.js";
 import Settings from "./Settings.js";
 import Cart from "./Cart.js";
 import axios from 'axios';
-import { Box, Button, useColorMode } from "@chakra-ui/core";
+import { Box, Button, useColorMode, Heading, Flex } from "@chakra-ui/core";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 
 
@@ -49,42 +50,55 @@ class Header extends React.Component {
     render() {
         return (
             <Router>
-    		<Box bg="teal.100" w="100%" p={20}>
-                <Link to="/about">
-                <Button style={{float: 'left'}}>
-                    About
-                </Button>
-                </Link>
-                <Link to="/products">
-                <Button style={{float: 'left'}}>
-                    Shop
-                </Button>
-                </Link>
-                <ColorModeButton />
-                <Login
-                    reload={this.componentDidMount}
-                    authenticated={this.state.authenticated}
-                />
-                <Register
-                    reload={this.componentDidMount}
-                    authenticated={this.state.authenticated}
-                />
-                <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.logout}>
-                    Logout
-                </Button>
-                <Link to="/cart">
-                <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showCart}>
-                    Cart
-                </Button>
-                </Link>
-                <Link to="/settings">
-                <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showSettings}>
-                    Settings
-                </Button>
-                </Link>
+    		<Box bg="teal.100" color="gray.800" w="100%" p={16}>
+                <Box>
+                    <Link to="/products">
+                    <Box p={3}>
+                        <Heading size="2xl" style={{float: 'left'}}>
+                            Alpaca Shop
+                        </Heading>
+                    </Box>
+                    </Link>
+                    <Box p={8}>
+                    </Box>
+                    <Link to="/about">
+                    <Button style={{float: 'left'}}>
+                        About
+                    </Button>
+                    </Link>
+                    <Link to="/products">
+                    <Button style={{float: 'left'}}>
+                        Shop
+                    </Button>
+                    </Link>
+                    <Login
+                        reload={this.componentDidMount}
+                        authenticated={this.state.authenticated}
+                    />
+                    <Register
+                        reload={this.componentDidMount}
+                        authenticated={this.state.authenticated}
+                    />
+                    <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.logout}>
+                        Logout
+                    </Button>
+                    <Link to="/cart">
+                    <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showCart}>
+                        Cart
+                    </Button>
+                    </Link>
+                    <Link to="/settings">
+                    <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showSettings}>
+                        Settings
+                    </Button>
+                    </Link>
+                </Box>
     		</Box>
 
         	    <Switch>
+                <Route exact path="/">
+                    <Redirect to="/products" />
+                </Route>
             <Route path="/about">
                 <About />
             </Route>
