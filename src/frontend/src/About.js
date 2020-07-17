@@ -1,13 +1,17 @@
 import React from 'react';
-import { SimpleGrid, Box, Flex } from "@chakra-ui/core";
+import { SimpleGrid, Box, Flex, Text } from "@chakra-ui/core";
 
 
 
 
 function About() {
 	return (
-		<Flex bg="blue.50" height="900px" align="center" justify="center">
-			This is the about page
+		<Flex p={15} bg="blue.50" height="900px" justify="center">
+			<Box w="60%">
+				<Text color="gray.700" mt="20" fontWeight="semibold" fontSize="2xl">
+					This is the Alpaca store. Each purchase comes with a comprehensive guide for caring for your alpaca, and a month worth of supply of your alpaca's favorite snacks!
+				</Text>
+			</Box>
 		</Flex>
 	);
 }

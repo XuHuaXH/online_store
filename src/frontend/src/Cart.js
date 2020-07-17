@@ -86,7 +86,7 @@ class Cart extends React.Component {
 	render() {
 		return (
 			<Flex bg="blue.50" w="100%" p={16} alignItems="center">
-				<Box bg="red.50" w="100%" p={16} alignItems="center">
+				<Box w="100%" p={16} alignItems="center">
 					<Heading p={5}>
 						Cart
 					</Heading>

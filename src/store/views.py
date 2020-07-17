@@ -123,30 +123,16 @@ def create_order(request):
     if address.owner != request.user:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    try:
-        # calculate the total price of all cart items
-        cart_items = CartItem.objects.filter(owner=request.user)
-        amount = 0.0
-        for item in cart_items:
-            price = item.product.price
-            amount += price * item.count
+    # calculate the total price of all cart items
+    cart_items = CartItem.objects.filter(owner=request.user)
+    amount = 0.0
+    for item in cart_items:
+        price = item.product.price
+        amount += price * item.count
 
-        order = Order.create(owner=request.user, shipping_address=address, total_price=amount)
+    order = Order(owner=request.user, shipping_address=address, total_price=amount)
 
-        order = order.save()
-    except:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    # # calculate the total price of all cart items
-    # cart_items = CartItem.objects.filter(owner=request.user)
-    # amount = 0.0
-    # for item in cart_items:
-    #     price = item.product.price
-    #     amount += price * item.count
-    #
-    # order = Order(owner=request.user, shipping_address=address, total_price=amount)
-    #
-    # order.save()
+    order.save()
 
     # create individual order items
     for item in cart_items:

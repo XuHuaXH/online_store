@@ -20,10 +20,10 @@ class ProductDetails extends React.Component {
 
     render() {
 		return (
-			<>
+			<Box bg="blue.50">
 				<OrderPanel id={this.state.id}/>
 				<Reviews id={this.state.id}/>
-			</>
+			</Box>
 	    );
 	}
 }

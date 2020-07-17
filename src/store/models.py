@@ -53,7 +53,7 @@ class Address(models.Model):
 
 class Order(models.Model):
     time = models.DateTimeField(auto_now=True)
-    total_price = models.FloatField()
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     shipping_address = models.ForeignKey(Address, on_delete=models.DO_NOTHING, default='')
 

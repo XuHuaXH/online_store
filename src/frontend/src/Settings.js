@@ -56,7 +56,7 @@ class Settings extends React.Component {
 	render() {
 		return (
 			<Box bg="blue.50" w="100%" p={16} alignItems="center">
-				<Box bg="red.50" w="100%" p={16} alignItems="center">
+				<Box bg="blue.50" w="100%" p={16} alignItems="center">
 					<Heading p={5}>
 						Address
 					</Heading>
@@ -73,7 +73,7 @@ class Settings extends React.Component {
 					</Box>
 				</Box>
 
-				<Box bg="red.50" w="100%" p={16} alignItems="center">
+				<Box bg="blue.50" w="100%" p={16} alignItems="center">
 					<Heading p={5}>
 						Orders
 					</Heading>
