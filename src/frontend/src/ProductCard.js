@@ -46,15 +46,10 @@ class ProductCard extends React.Component {
 
     fetchReviews = () => {
 		const token = localStorage.getItem('token');
-		const header = {
-			headers: {
-				Authorization: "JWT " + token
-			}
-		};
 		const data = {
 			"id": this.props.product.id
 		}
-		axios.post('http://127.0.0.1:8000/list-reviews/', data, header).then( (response) => {
+		axios.post('http://127.0.0.1:8000/list-reviews/', data).then( (response) => {
 			this.setState({
                 reviews: response.data,
 				reviewCount: response.data.length,

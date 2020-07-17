@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from store.models import Product, CartItem, Order, OrderItem, Address, Review,  Image
 from store.serializers import ProductSerializer, CartItemSerializer, CreateCartItemSerializer, AddressSerializer, CreateAddressSerializer, OrderSerializer, ReviewSerializer, ImageSerializer, CreateImageSerializer, UpdateCartItemSerializer
 
@@ -16,7 +16,7 @@ def list_products(request):
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])  # to remove
+@permission_classes([IsAdminUser])
 def create_product(request):
     serializer = ProductSerializer(data=request.data)
     if serializer.is_valid():
@@ -27,7 +27,7 @@ def create_product(request):
 
 # delete a product
 @api_view(['DELETE'])
-@permission_classes([AllowAny])  # to remove
+@permission_classes([IsAdminUser])
 def delete_product(request):
     try:
         product = Product.objects.get(id=request.data["id"])
@@ -123,30 +123,30 @@ def create_order(request):
     if address.owner != request.user:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    # try:
-    #     # calculate the total price of all cart items
-    #     cart_items = CartItem.objects.filter(owner=request.user)
-    #     amount = 0.0
-    #     for item in cart_items:
-    #         price = item.product.price
-    #         amount += price * item.count
+    try:
+        # calculate the total price of all cart items
+        cart_items = CartItem.objects.filter(owner=request.user)
+        amount = 0.0
+        for item in cart_items:
+            price = item.product.price
+            amount += price * item.count
+
+        order = Order.create(owner=request.user, shipping_address=address, total_price=amount)
+
+        order = order.save()
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    # # calculate the total price of all cart items
+    # cart_items = CartItem.objects.filter(owner=request.user)
+    # amount = 0.0
+    # for item in cart_items:
+    #     price = item.product.price
+    #     amount += price * item.count
     #
-    #     order = Order.create(owner=request.user, shipping_address=address, total_price=amount)
+    # order = Order(owner=request.user, shipping_address=address, total_price=amount)
     #
-    #     order = order.save()
-    # except:
-    #     return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    # calculate the total price of all cart items
-    cart_items = CartItem.objects.filter(owner=request.user)
-    amount = 0.0
-    for item in cart_items:
-        price = item.product.price
-        amount += price * item.count
-
-    order = Order(owner=request.user, shipping_address=address, total_price=amount)
-
-    order.save()
+    # order.save()
 
     # create individual order items
     for item in cart_items:
@@ -256,7 +256,7 @@ def review(request):
 
 # create a new image
 @api_view(['POST'])
-@permission_classes([AllowAny])  # to remove
+@permission_classes([IsAdminUser])
 def create_image(request):
     serializer = CreateImageSerializer(data=request.data)
     if serializer.is_valid():
@@ -267,7 +267,7 @@ def create_image(request):
 
 # delete an image
 @api_view(['DELETE'])
-@permission_classes([AllowAny])  # to remove
+@permission_classes([IsAdminUser])
 def delete_image(request):
 
     try:
@@ -284,7 +284,7 @@ def delete_image(request):
 
 # list all images
 @api_view(['GET'])
-@permission_classes([AllowAny])
+@permission_classes([IsAdminUser])
 def all_images(request):
     images = Image.objects.all()
     serializer = ImageSerializer(images, many=True)
