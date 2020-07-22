@@ -1,15 +1,9 @@
 import React from 'react';
-import {withRouter} from 'react-router';
-import { Box, Image, Badge, Icon, Flex } from "@chakra-ui/core";
+import { Flex } from "@chakra-ui/core";
 import Gallery from "./Gallery.js";
 import ProductInfo from "./ProductInfo.js";
 
 class OrderPanel extends React.Component {
-
-	constructor(props) {
-		super(props);
-	}
-
 
     render() {
 		return (

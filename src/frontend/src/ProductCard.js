@@ -2,12 +2,9 @@ import React from 'react';
 import axios from 'axios';
 import { Box, Image, Badge, Icon } from "@chakra-ui/core";
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
   Link
 } from "react-router-dom";
-import ProductDetails from "./ProductDetails.js";
+import * as Constants from "./Constants.js";
 
 // imageUrl: "https://bit.ly/2Z4KKcF"
 class ProductCard extends React.Component {
@@ -36,7 +33,7 @@ class ProductCard extends React.Component {
 		const data = {
 			"id": this.props.product.id
 		}
-		axios.post("http://127.0.0.1:8000/list-images/", data).then((response) => {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/list-images/", data).then((response) => {
 			this.setState({
 				image: response.data[0]
 			});
@@ -45,11 +42,10 @@ class ProductCard extends React.Component {
 	}
 
     fetchReviews = () => {
-		const token = localStorage.getItem('token');
 		const data = {
 			"id": this.props.product.id
 		}
-		axios.post('http://127.0.0.1:8000/list-reviews/', data).then( (response) => {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/list-reviews/", data).then( (response) => {
 			this.setState({
                 reviews: response.data,
 				reviewCount: response.data.length,
@@ -63,7 +59,7 @@ class ProductCard extends React.Component {
         for (let i = 0; i < reviews.length; ++i) {
             sum += reviews[i].rating;
         }
-        const rating = reviews.length == 0 ? 0 : sum / reviews.length;
+        const rating = reviews.length === 0 ? 0 : sum / reviews.length;
         this.setState({
             rating: rating
         });

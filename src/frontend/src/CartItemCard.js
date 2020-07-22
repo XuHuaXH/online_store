@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { Box, Image, Badge, Icon, Heading, Text, Button, Flex } from "@chakra-ui/core";
+import { Box, Button, Flex } from "@chakra-ui/core";
 import {
   NumberInput,
   NumberInputField,
@@ -8,7 +8,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from "@chakra-ui/core";
-import AddressEditor from "./AddressEditor.js";
+import * as Constants from "./Constants.js";
 
 class CartItemCard extends React.Component {
 
@@ -26,7 +26,7 @@ class CartItemCard extends React.Component {
 	}
 
 	handleDelete = () => {
-		const url = "http://localhost:8000/cart-item/";
+		const url = Constants.BASE_URL + ":" + Constants.PORT + "/cart-item/";
 		const token = localStorage.getItem('token');
 		const config = {
 			headers: {
@@ -40,7 +40,7 @@ class CartItemCard extends React.Component {
 	}
 
 	changeOrderSize = (size) => {
-		const url = "http://localhost:8000/cart-item/";
+		const url = Constants.BASE_URL + ":" + Constants.PORT + "/cart-item/";
 		const token = localStorage.getItem('token');
 		const data = {
 			"id": this.state.id,

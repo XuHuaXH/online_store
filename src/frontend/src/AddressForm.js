@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { SimpleGrid, Box, Flex, Button, Input, useDisclosure } from "@chakra-ui/core";
+import { Button, Input, useDisclosure } from "@chakra-ui/core";
 import {
   Modal,
   ModalOverlay,
@@ -16,6 +16,7 @@ import {
   FormErrorMessage,
   FormHelperText,
 } from "@chakra-ui/core";
+import * as Constants from "./Constants.js";
 
 
 
@@ -47,7 +48,7 @@ function AddressForm(props) {
 		};
         console.log(data);
         console.log(header);
-		axios.post('http://127.0.0.1:8000/create-address/', data, header).then(function (response) {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/create-address/", data, header).then(function (response) {
             console.log(response.data);
 		}).then(onClose).then(props.reload);
 	}

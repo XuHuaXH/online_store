@@ -1,13 +1,7 @@
 import React from 'react';
-import axios from 'axios';
-import { Box, Image, Badge, Icon, Heading, Text, Button, Flex, Divider } from "@chakra-ui/core";
+import { Box, Flex, Divider } from "@chakra-ui/core";
 
 class OrderCard extends React.Component {
-
-	constructor(props) {
-		super(props);
-	}
-
 
     render() {
 		const order = this.props.order;

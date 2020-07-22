@@ -1,7 +1,6 @@
 import React from 'react';
-import {withRouter} from 'react-router';
 import axios from 'axios';
-import { Box, Image, Badge, Icon, Flex, Heading, Divider, Input, Button, Textarea } from "@chakra-ui/core";
+import { Box, Icon, Flex, Heading, Input, Button, Textarea } from "@chakra-ui/core";
 import {
   FormControl,
   FormLabel,
@@ -9,6 +8,7 @@ import {
   FormHelperText,
 } from "@chakra-ui/core";
 import ReviewCard from "./ReviewCard.js";
+import * as Constants from "./Constants.js";
 
 class ReviewEditor extends React.Component {
 
@@ -57,7 +57,7 @@ class ReviewEditor extends React.Component {
       			Authorization: "JWT " + token
    			}
 		};
-		axios.post('http://127.0.0.1:8000/add-review/', data, header).then(function (response) {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/add-review/", data, header).then(function (response) {
             console.log(response.data);
 		}).then(() => {
             this.setState({
@@ -82,6 +82,7 @@ class ReviewEditor extends React.Component {
 							<Box p={3}>
 								<FormLabel htmlFor="title">Title</FormLabel>
 								<Input
+                                    bg="yellow.50"
                                     value={this.state.title}
 									onChange={this.setTitle}
 									borderColor="gray.500"
@@ -90,6 +91,7 @@ class ReviewEditor extends React.Component {
 							<Box p={3}>
 								<FormLabel htmlFor="review">Review</FormLabel>
 								<Textarea
+                                    bg="yellow.50"
                                     value={this.state.review}
 									onChange={this.setReview}
 									borderColor="gray.500"
@@ -103,6 +105,8 @@ class ReviewEditor extends React.Component {
 				  	                <Button
 										width="10px"
 										size="lg"
+                                        variant="ghost"
+                                        variantColor="yellow"
 										onClick={() => this.setRating(i + 1)}>
 										<Icon
 										  size="26px"

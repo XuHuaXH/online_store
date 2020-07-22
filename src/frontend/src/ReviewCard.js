@@ -1,12 +1,6 @@
 import React from 'react';
-import { Box, Image, Badge, Icon, Divider, Flex } from "@chakra-ui/core";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-import ProductDetails from "./ProductDetails.js";
+import { Box, Icon, Flex } from "@chakra-ui/core";
+
 
 class ReviewCard extends React.Component {
 

@@ -1,16 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { Box, Image, Badge, Icon, Heading, Text, Button, Flex } from "@chakra-ui/core";
+import { Box, Heading, Button, Flex } from "@chakra-ui/core";
 import AddressEditor from "./AddressEditor.js";
+import * as Constants from "./Constants.js";
 
 class AddressCard extends React.Component {
 
-	constructor(props) {
-		super(props);
-	}
-
 	handleDelete = () => {
-		const url = "http://localhost:8000/address/";
+		const url = Constants.BASE_URL + ":" + Constants.PORT + "/address/";
 		const token = localStorage.getItem('token');
 		const config = {
 			headers: {

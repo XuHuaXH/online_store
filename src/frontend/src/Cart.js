@@ -1,7 +1,9 @@
 import React from 'react';
-import { SimpleGrid, Box, Flex, Heading, Button, Select } from "@chakra-ui/core";
+import { Box, Flex, Heading, Button, Select } from "@chakra-ui/core";
 import CartItemCard from "./CartItemCard.js";
 import axios from 'axios';
+import * as Constants from "./Constants.js";
+
 
 
 
@@ -23,7 +25,7 @@ class Cart extends React.Component {
    			}
 		}
 
-		axios.get('http://127.0.0.1:8000/view-cart/', config)
+		axios.get(Constants.BASE_URL + ":" + Constants.PORT + "/view-cart/", config)
 		.then((response) => {
 			console.log(response.data);
 			this.setState({
@@ -39,7 +41,7 @@ class Cart extends React.Component {
       			Authorization: "JWT " + token
    			}
 		};
-		axios.get('http://127.0.0.1:8000/list-addresses/', config).then((response) => {
+		axios.get(Constants.BASE_URL + ":" + Constants.PORT + "/list-addresses/", config).then((response) => {
 			this.setState({
 				addresses: response.data,
 			});
@@ -60,7 +62,7 @@ class Cart extends React.Component {
 	}
 
 	handleCheckout = () => {
-		if (this.state.selectedAddress == -1) {
+		if (this.state.selectedAddress === -1) {
 			alert("Please select a valid address");
 		}
 		const token = localStorage.getItem('token');
@@ -73,7 +75,7 @@ class Cart extends React.Component {
 			"address": this.state.selectedAddress
 		};
 
-		axios.post('http://127.0.0.1:8000/create-order/', data, header)
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/create-order/", data, header)
 		.then((response) => {
 			console.log(response.data);
 			this.setState({
@@ -85,8 +87,8 @@ class Cart extends React.Component {
 
 	render() {
 		return (
-			<Flex bg="blue.50" w="100%" p={16} alignItems="center">
-				<Box w="100%" p={16} alignItems="center">
+			<Flex bg="blue.50" w="100%" height={900} p={16}>
+				<Box w="100%" p={16}>
 					<Heading p={5}>
 						Cart
 					</Heading>
@@ -98,10 +100,10 @@ class Cart extends React.Component {
 								index={index}/>
 						)}
 					</Box>
-					<Box p={5} style={{ display: this.state.items.length == 0 ? "block" : "none" }}>
+					<Box p={5} style={{ display: this.state.items.length === 0 ? "block" : "none" }}>
 						Nothing in cart yet :)
 					</Box>
-					<Flex p={4} style={{ display: this.state.items.length == 0 ? "none" : 'inline-block' }} w="100%" justify="center" alignItems="center">
+					<Flex p={4} style={{ display: this.state.items.length === 0 ? "none" : 'inline-block' }} w="100%" justify="center" alignItems="center">
 						<Select
 							w="40%"
 							placeholder="Select a shipping address"

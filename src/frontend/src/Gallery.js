@@ -1,8 +1,7 @@
 import React from 'react';
-import {withRouter} from 'react-router';
 import axios from 'axios';
-import { Box, Image, Badge, Icon, Flex } from "@chakra-ui/core";
 import Carousel from 'react-bootstrap/Carousel';
+import * as Constants from "./Constants.js";
 
 
 class Gallery extends React.Component {
@@ -20,11 +19,10 @@ class Gallery extends React.Component {
 	}
 
 	fetchImages = () => {
-		const imageList = [];
 		const data = {
 			"id": this.props.id
 		}
-		axios.post("http://127.0.0.1:8000/list-images/", data).then((response) => {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/list-images/", data).then((response) => {
 			this.setState({
 				images: response.data
 			});

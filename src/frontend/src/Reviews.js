@@ -1,7 +1,6 @@
 import React from 'react';
-import {withRouter} from 'react-router';
 import axios from 'axios';
-import { Box, Image, Badge, Icon, Flex, Heading, Divider, Input, Radio, RadioGroup } from "@chakra-ui/core";
+import { Box, Heading } from "@chakra-ui/core";
 import {
   FormControl,
   FormLabel,
@@ -10,6 +9,7 @@ import {
 } from "@chakra-ui/core";
 import ReviewCard from "./ReviewCard.js";
 import ReviewEditor from "./ReviewEditor.js";
+import * as Constants from "./Constants.js";
 
 class Review extends React.Component {
 
@@ -30,7 +30,7 @@ class Review extends React.Component {
 			"id": this.props.id
 		}
 
-		axios.post('http://127.0.0.1:8000/list-reviews/', data).then( (response) => {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/list-reviews/", data).then( (response) => {
 			this.setState({
 				reviews: response.data,
 			});

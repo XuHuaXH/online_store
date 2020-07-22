@@ -2,13 +2,7 @@ import React from 'react';
 import { SimpleGrid, Box, Flex } from "@chakra-ui/core";
 import axios from 'axios';
 import ProductCard from './ProductCard.js';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
-
+import * as Constants from "./Constants.js";
 
 
 
@@ -23,7 +17,7 @@ class Products extends React.Component {
 
 	componentDidMount() {
 		let list = [];
-		axios.get("http://localhost:8000/list-products/").then((response) => {
+		axios.get(Constants.BASE_URL + ":" + Constants.PORT + "/list-products/").then((response) => {
 			list = response.data;
 			this.setState({
 				productList: list

@@ -1,9 +1,10 @@
 import React from 'react';
-import { SimpleGrid, Box, Flex, Heading, Button } from "@chakra-ui/core";
+import { Box, Heading, Divider } from "@chakra-ui/core";
 import AddressCard from "./AddressCard.js";
 import AddressForm from "./AddressForm.js";
 import OrderCard from "./OrderCard.js";
 import axios from 'axios';
+import * as Constants from "./Constants.js";
 
 
 
@@ -23,7 +24,7 @@ class Settings extends React.Component {
       			Authorization: "JWT " + token
    			}
 		};
-		axios.get('http://127.0.0.1:8000/list-addresses/', config).then((response) => {
+		axios.get(Constants.BASE_URL + ":" + Constants.PORT + "/list-addresses/", config).then((response) => {
 			this.setState({
 				addresses: response.data,
 			});
@@ -39,7 +40,7 @@ class Settings extends React.Component {
    			}
 		}
 
-		axios.get('http://127.0.0.1:8000/list-orders/', config).then( (response) => {
+		axios.get(Constants.BASE_URL + ":" + Constants.PORT + "/list-orders/", config).then( (response) => {
 			this.setState({
 				orders: response.data,
 			});
@@ -60,6 +61,9 @@ class Settings extends React.Component {
 					<Heading p={5}>
 						Address
 					</Heading>
+					<Box p={5} style={{ display: this.state.addresses.length === 0 ? "block" : "none" }}>
+						No address added yet : (
+					</Box>
 					<Box alignItems="center" justify="center">
 						{this.state.addresses.map((address, index) =>
 							<AddressCard
@@ -72,11 +76,15 @@ class Settings extends React.Component {
 						<AddressForm reload={this.fetchAddresses} />
 					</Box>
 				</Box>
+				<Divider borderColor="gray.300"/>
 
 				<Box bg="blue.50" w="100%" p={16} alignItems="center">
 					<Heading p={5}>
 						Orders
 					</Heading>
+					<Box p={5} style={{ display: this.state.orders.length === 0 ? "block" : "none" }}>
+						Placed order will show up here ; )
+					</Box>
 					<Box alignItems="center" justify="center">
 						{this.state.orders.map((order, index) =>
 							<OrderCard

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import Home from './Home.js';
-import Test from './Test.js';
+import React from 'react';
 import Login from './Login.js';
 import Register from './Register.js';
 import Products from './Products.js';
@@ -10,7 +8,7 @@ import ProductDetails from "./ProductDetails.js";
 import Settings from "./Settings.js";
 import Cart from "./Cart.js";
 import axios from 'axios';
-import { Box, Button, useColorMode, Heading, Flex } from "@chakra-ui/core";
+import { Box, Button, useColorMode, Heading } from "@chakra-ui/core";
 import {
   BrowserRouter as Router,
   Switch,
@@ -18,17 +16,10 @@ import {
   Link,
   Redirect
 } from "react-router-dom";
+import * as Constants from "./Constants.js";
 
 
 class Header extends React.Component {
-
-    logout = () => {
-        axios.post('http://127.0.0.1:8000/rest-auth/logout/').then(() => {
-            localStorage.removeItem('token');
-        }).then(() => {
-            this.setState({authenticated: false});
-        });
-    }
 
 
     constructor(props) {
@@ -44,6 +35,14 @@ class Header extends React.Component {
         }
         console.log(this.state.authenticated);
         this.render();
+    }
+
+    logout = () => {
+        axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/rest-auth/logout/").then(() => {
+            localStorage.removeItem('token');
+        }).then(() => {
+            this.setState({authenticated: false});
+        });
     }
 
 
@@ -62,12 +61,12 @@ class Header extends React.Component {
                     <Box p={8}>
                     </Box>
                     <Link to="/about">
-                    <Button style={{float: 'left'}}>
+                    <Button color="black" variantColor="teal" variant="ghost" style={{float: 'left'}}>
                         About
                     </Button>
                     </Link>
                     <Link to="/products">
-                    <Button style={{float: 'left'}}>
+                    <Button color="black" variantColor="teal" variant="ghost" style={{float: 'left'}}>
                         Shop
                     </Button>
                     </Link>
@@ -79,16 +78,18 @@ class Header extends React.Component {
                         reload={this.componentDidMount}
                         authenticated={this.state.authenticated}
                     />
-                    <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.logout}>
+                    <Link to="/products">
+                    <Button color="black" variantColor="teal" variant="ghost" style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.logout}>
                         Logout
                     </Button>
+                    </Link>
                     <Link to="/cart">
-                    <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showCart}>
+                    <Button color="black" variantColor="teal" variant="ghost" style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showCart}>
                         Cart
                     </Button>
                     </Link>
                     <Link to="/settings">
-                    <Button style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showSettings}>
+                    <Button color="black" variantColor="teal" variant="ghost" style={{float: 'right', display: this.state.authenticated ? 'block' : 'none'}} onClick={this.showSettings}>
                         Settings
                     </Button>
                     </Link>

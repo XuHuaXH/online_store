@@ -1,7 +1,6 @@
 import React from 'react';
-import {withRouter} from 'react-router';
 import axios from 'axios';
-import { Box, Image, Badge, Icon, Flex, Heading, Button, Divider } from "@chakra-ui/core";
+import { Box, Badge, Icon, Flex, Heading, Button, Divider } from "@chakra-ui/core";
 import {
   NumberInput,
   NumberInputField,
@@ -9,6 +8,7 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from "@chakra-ui/core";
+import * as Constants from "./Constants.js";
 
 class ProductInfo extends React.Component {
 
@@ -36,7 +36,7 @@ class ProductInfo extends React.Component {
         for (let i = 0; i < reviews.length; ++i) {
             sum += reviews[i].rating;
         }
-        const rating = reviews.length == 0 ? 0 : sum / reviews.length;
+        const rating = reviews.length === 0 ? 0 : sum / reviews.length;
         this.setState({
             rating: rating
         });
@@ -52,7 +52,7 @@ class ProductInfo extends React.Component {
 		const data = {
 			"id": this.props.id
 		}
-		axios.post('http://127.0.0.1:8000/list-reviews/', data, header).then( (response) => {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/list-reviews/", data, header).then( (response) => {
 			this.setState({
                 reviews: response.data,
 				reviewCount: response.data.length,
@@ -64,7 +64,7 @@ class ProductInfo extends React.Component {
 		const data = {
 			"id": this.props.id
 		}
-		axios.post("http://localhost:8000/product/", data).then((response) => {
+		axios.post(Constants.BASE_URL + ":" + Constants.PORT + "/product/", data).then((response) => {
 			this.setState({
 				product: response.data
 			});
@@ -73,7 +73,7 @@ class ProductInfo extends React.Component {
 	}
 
 	handleAddToCart = () => {
-		const url = "http://localhost:8000/add-item/";
+		const url = Constants.BASE_URL + ":" + Constants.PORT + "/add-item/";
 		const token = localStorage.getItem('token');
 		const data = {
 			"product" : this.props.id,
@@ -143,6 +143,7 @@ class ProductInfo extends React.Component {
 			<Flex mt="4">
 				<NumberInput w="30%" defaultValue={1} min={1} max={20} onChange={this.changeOrderSize}>
 					<NumberInputField
+                        bg="blue.50"
 						borderColor="gray.500" />
 					<NumberInputStepper>
 					<NumberIncrementStepper borderColor="gray.500" color="gray.500"/>

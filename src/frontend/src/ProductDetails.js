@@ -1,6 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router';
-import { Box, Image, Badge, Icon } from "@chakra-ui/core";
+import { Box } from "@chakra-ui/core";
 import OrderPanel from "./OrderPanel.js";
 import Reviews from "./Reviews.js";
 
