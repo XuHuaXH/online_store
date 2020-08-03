@@ -4,7 +4,7 @@ Online store web app built with [Django REST framework](https://www.django-rest-
 
 Functionalities:
   - User Registration and Authentication
-  - Adding item to cart and placing orders
+  - Shopping cart and placing orders
   - Saved shipping addresses and order history
   - Customer reviews and ratings
   
