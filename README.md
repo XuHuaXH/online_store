@@ -8,4 +8,3 @@ Functionalities:
   - Saved shipping addresses and order history
   - Customer reviews and ratings
   
-[Project Demo](http://13.57.201.133:3000)
